@@ -1,38 +1,40 @@
-module Grid exposing (GridElement, gridContainer, gridElement)
+module Grid exposing (Area, GridTemplate, GridElement, gridArea, gridContainer, gridElement, template)
 
 import Css exposing (Style, property, px)
 import Css.Media as Media exposing (only, screen, withMedia)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
+import Tagged exposing (Tagged(..))
 
 
-{-| Opaque type representing a grid-area element
--}
-type GridElement msg
-    = GridElement
-        { area : String
-        , children : List (Html msg)
-        }
+type GridArea
+    = GridArea
 
-renderGridElement : GridElement msg -> Html msg
-renderGridElement gridElem =
-    case gridElem of
-        GridElement { area, children } ->
-            div
-                [ css [ property "grid-area" area ] ]
-                children
+type alias Area = Tagged GridArea String
+
+gridArea : String -> Area
+gridArea name =
+    Tagged name
+
+type GridTemplate = GridTemplate (List (List Area))
+
+-- TODO having inner lists of different sizes won't work
+
+template : List (List Area) -> GridTemplate
+template areaLists =
+    let lengths = List.map (\list -> List.length list) areaLists
+        min = List.minimum lengths
+        max = List.maximum lengths
+    in
+        if (min == max) then
+            GridTemplate areaLists
+        else
+            GridTemplate []
+
 
 -- TODO typed area names !
-{-| Creates a grid-area element that gets its grid-position by the area's name
--}
-gridElement : String -> List (Html msg) -> GridElement msg
-gridElement area children =
-    GridElement
-        { area = area
-        , children = children
-        }
-
 -- TODO media-query related grid-templates and values -> as configuration parameters !
+
 
 {-| Creates a grid-container with grid-area-template(s)
 -}
@@ -65,3 +67,31 @@ gridTemplate areas rows cols =
         , property "grid-template-columns" <| String.join "" cols
         , property "grid-column-gap" "10px"
         ]
+
+
+{-| Opaque type representing a grid-area element
+-}
+type GridElement msg
+    = GridElement
+        { area : String
+        , children : List (Html msg)
+        }
+
+
+renderGridElement : GridElement msg -> Html msg
+renderGridElement gridElem =
+    case gridElem of
+        GridElement { area, children } ->
+            div
+                [ css [ property "grid-area" area ] ]
+                children
+
+
+{-| Creates a grid-area element that gets its grid-position by the area's name
+-}
+gridElement : String -> List (Html msg) -> GridElement msg
+gridElement area children =
+    GridElement
+        { area = area
+        , children = children
+        }
