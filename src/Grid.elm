@@ -1,7 +1,8 @@
-module Grid exposing (Area, GridTemplate, GridElement, gridArea, gridContainer, gridElement, template)
+module Grid exposing (Area, GridContainer, GridElement, GridTemplate, container, gridArea, gridContainer, gridElement, template)
 
+import Array2D exposing (Array2D)
 import Css exposing (Style, property, px)
-import Css.Media as Media exposing (only, screen, withMedia)
+import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 import Tagged exposing (Tagged(..))
@@ -10,26 +11,38 @@ import Tagged exposing (Tagged(..))
 type GridArea
     = GridArea
 
-type alias Area = Tagged GridArea String
+
+type alias Area =
+    Tagged GridArea String
+
 
 gridArea : String -> Area
 gridArea name =
     Tagged name
 
-type GridTemplate = GridTemplate (List (List Area))
+-- TODO
+type alias RowSize = String
+-- TODO
+type alias ColSize = String
 
--- TODO having inner lists of different sizes won't work
+type GridTemplate
+    = GridTemplate (Array2D Area) (List RowSize) (List ColSize)
 
-template : List (List Area) -> GridTemplate
-template areaLists =
-    let lengths = List.map (\list -> List.length list) areaLists
-        min = List.minimum lengths
-        max = List.maximum lengths
-    in
-        if (min == max) then
-            GridTemplate areaLists
-        else
-            GridTemplate []
+
+template : Array2D Area -> List RowSize -> List ColSize -> GridTemplate
+template areaLists rowSizes colSizes =
+    GridTemplate areaLists rowSizes colSizes
+
+
+type GridContainer
+    = GridContainer (List ( List MediaQuery, GridTemplate ))
+
+
+container : List ( List MediaQuery, GridTemplate ) -> GridContainer
+container mappings =
+    -- TODO
+    GridContainer []
+
 
 
 -- TODO typed area names !
@@ -47,24 +60,24 @@ gridContainer attributes children =
 contentBig : Style
 contentBig =
     withMedia [ only screen [ Media.minWidth (px 501) ] ]
-        [ gridTemplate [ "button url", "main main" ] [ "1fr 5fr" ] [ "1fr 5fr" ] ]
+        [ gridTemplate [ "button url url", "main main main" ] "1fr 5fr" "1fr 2fr 2fr" ]
 
 
 contentSmall : Style
 contentSmall =
     withMedia [ only screen [ Media.maxWidth (px 500) ] ]
-        [ gridTemplate [ "button", "main", "url" ] [ "1fr 5fr 1fr" ] [ "1fr" ] ]
+        [ gridTemplate [ "button", "main", "url" ] "1fr 3fr 1fr" "1fr" ]
 
 
-gridTemplate : List String -> List String -> List String -> Style
+gridTemplate : List String -> String -> String -> Style
 gridTemplate areas rows cols =
     Css.batch
         [ property "display" "grid"
         , property "width" "100%"
         , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areas)
-        , property "grid-template-rows" <| String.join "" rows
+        , property "grid-template-rows" rows
         , property "grid-row-gap" "10px"
-        , property "grid-template-columns" <| String.join "" cols
+        , property "grid-template-columns" cols
         , property "grid-column-gap" "10px"
         ]
 
