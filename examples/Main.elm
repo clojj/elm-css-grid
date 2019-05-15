@@ -5,7 +5,7 @@ import Browser
 import Css exposing (backgroundColor, border, border3, dashed, height, pct, px, rgb, solid)
 import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
 import Grid
-import Html.Styled exposing (button, div, text, toUnstyled)
+import Html.Styled exposing (Html, button, div, text, toUnstyled)
 import Html.Styled.Attributes exposing (css, style)
 
 
@@ -101,12 +101,18 @@ update msg model =
 
 view : Model -> Html.Styled.Html msg
 view model =
+    -- TODO
     Grid.gridContainer
-        [ style "width" "100%", style "height" "100%" ]
-        [ Grid.gridElement "button" [ button [] [ text "Button" ] ]
-        , Grid.gridElement "url" [ text "Url" ]
-        , Grid.gridElement "main" [ div [ css [ border3 (px 5) solid (rgb 50 50 50) ] ] [ text "Main" ] ]
+        [ ]
+        [ Grid.gridElement "button" (panel "button ")
+        , Grid.gridElement "url" (panel "url ")
+        , Grid.gridElement "main" (panel "main ")
         ]
+
+
+panel : String -> List (Html msg)
+panel name =
+    [ div [ css [ border3 (px 3) solid (rgb 50 50 50) ] ] (List.repeat 15 (text name)) ]
 
 
 main : Program () Model msg
