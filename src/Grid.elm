@@ -1,7 +1,6 @@
 module Grid exposing (GridArea, GridElement, GridTemplate, MediaQueryWithGridTemplate, container, gridArea, gridContainer, gridElement, template)
 
 import Array exposing (Array)
-import Array2D exposing (Array2D)
 import Css exposing (Style, property, px)
 import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
 import Html.Styled exposing (Attribute, Html, div)
@@ -33,13 +32,17 @@ type alias ColSize =
     String
 
 
+type alias Areas =
+    List (List GridArea)
+
+
 type GridTemplate
-    = GridTemplate (Array2D GridArea) (List RowSize) (List ColSize)
+    = GridTemplate Areas (List RowSize) (List ColSize)
 
 
-template : Array2D GridArea -> List RowSize -> List ColSize -> GridTemplate
-template areaLists rowSizes colSizes =
-    GridTemplate areaLists rowSizes colSizes
+template : Areas -> List RowSize -> List ColSize -> GridTemplate
+template areas rowSizes colSizes =
+    GridTemplate areas rowSizes colSizes
 
 
 type alias MediaQueryWithGridTemplate =
@@ -93,35 +96,20 @@ container mappings attributes children =
         (List.map renderGridElement children)
 
 
-getRow : Array2D.Array2D GridArea -> Int -> Array GridArea
-getRow array2D row =
-    let
-        array =
-            Array2D.getRow row array2D
-    in
-    case array of
-        Just a ->
-            a
-
-        _ ->
-            Array.empty
-
-
 gridTemplateToStyle : GridTemplate -> Style
 gridTemplateToStyle (GridTemplate areas rows cols) =
-    let
-        areaRows =
-            List.map (getRow areas) (List.range 0 (Array2D.rows areas))
+    -- TODO
+    let areaRows =  List.map (\gridAreas -> List.map getGridAreaName gridAreas) areas
     in
-    Css.batch
-        [ property "display" "grid"
-        , property "width" "100%"
-        , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
-        , property "grid-template-rows" rows
-        , property "grid-row-gap" "10px"
-        , property "grid-template-columns" cols
-        , property "grid-column-gap" "10px"
-        ]
+        Css.batch
+            [ property "display" "grid"
+            , property "width" "100%"
+            , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
+            , property "grid-template-rows" rows
+            , property "grid-row-gap" "10px"
+            , property "grid-template-columns" cols
+            , property "grid-column-gap" "10px"
+            ]
 
 
 

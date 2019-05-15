@@ -10,8 +10,7 @@
             "elm/browser": "1.0.1",
             "elm/core": "1.0.2",
             "elm/html": "1.0.0",
-            "rtfeldman/elm-css": "16.0.1",
-            "tortus/elm-array-2d": "2.1.2"
+            "rtfeldman/elm-css": "16.0.1"
         },
         "indirect": {
             "Skinney/murmur3": "2.0.8",

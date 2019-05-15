@@ -1,12 +1,11 @@
-module Main exposing (Model, contentGridArea, footerGridArea, gridTemplateBad, gridTemplateBad_, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, myContainer, navGridArea, update, view)
+module Main exposing (Model, contentGridArea, footerGridArea, gridTemplateBad, gridTemplateBad_, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, navGridArea, update, view)
 
-import Array2D
 import Browser
-import Css exposing (backgroundColor, border, border3, dashed, height, pct, px, rgb, solid)
-import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
+import Css exposing (border3, px, rgb, solid)
+import Css.Media as Media exposing (MediaQuery, only, screen)
 import Grid exposing (..)
-import Html.Styled exposing (Attribute, Html, button, div, text, toUnstyled)
-import Html.Styled.Attributes exposing (css, style)
+import Html.Styled exposing (Attribute, Html, div, text, toUnstyled)
+import Html.Styled.Attributes exposing (css)
 
 
 type alias Model =
@@ -33,22 +32,22 @@ footerGridArea =
     gridArea "footer"
 
 
-{-| all rows will be []
--}
-gridTemplateBad : GridTemplate
+gridTemplateBad : GridTemplate -- TODO test
 gridTemplateBad =
     template
-        (Array2D.fromList [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ])
+        [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ]
         []
         []
 
 
-{-| second contentGridItem is ignored
--}
-gridTemplateBad_ : GridTemplate
+gridTemplateBad_ : GridTemplate -- TODO test
 gridTemplateBad_ =
     template
-        (Array2D.fromList [ [ headerGridArea ], [ contentGridArea, contentGridArea ], [ navGridArea ], [ footerGridArea ] ])
+        [ [ headerGridArea ]
+        , [ contentGridArea, contentGridArea ]
+        , [ navGridArea ]
+        , [ footerGridArea ]
+        ]
         []
         []
 
@@ -56,12 +55,10 @@ gridTemplateBad_ =
 gridTemplateBig : GridTemplate
 gridTemplateBig =
     template
-        (Array2D.fromList
-            [ [ headerGridArea, navGridArea, navGridArea ]
-            , [ contentGridArea, contentGridArea, contentGridArea ]
-            , [ footerGridArea, footerGridArea, footerGridArea ]
-            ]
-        )
+        [ [ headerGridArea, navGridArea, navGridArea ]
+        , [ contentGridArea, contentGridArea, contentGridArea ]
+        , [ footerGridArea, footerGridArea, footerGridArea ]
+        ]
         [ "1fr", "4fr", "1fr" ]
         [ "1fr", "1fr", "1fr" ]
 
@@ -69,13 +66,11 @@ gridTemplateBig =
 gridTemplateSmall : GridTemplate
 gridTemplateSmall =
     template
-        (Array2D.fromList
-            [ [ headerGridArea ]
-            , [ contentGridArea ]
-            , [ navGridArea ]
-            , [ footerGridArea ]
-            ]
-        )
+        [ [ headerGridArea ]
+        , [ contentGridArea ]
+        , [ navGridArea ]
+        , [ footerGridArea ]
+        ]
         [ "1fr", "4fr", "1fr", "1fr" ]
         [ "1fr" ]
 
