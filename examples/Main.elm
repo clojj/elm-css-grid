@@ -1,11 +1,11 @@
-module Main exposing (Model, contentGridItem, footerGridItem, gridTemplateBad, gridTemplateBad_, gridTemplateBig, gridTemplateSmall, headerGridItem, initialModel, main, myContainer, navGridItem, update, view)
+module Main exposing (Model, contentGridArea, footerGridArea, gridTemplateBad, gridTemplateBad_, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, myContainer, navGridArea, update, view)
 
 import Array2D
 import Browser
 import Css exposing (backgroundColor, border, border3, dashed, height, pct, px, rgb, solid)
 import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
-import Grid
-import Html.Styled exposing (Html, button, div, text, toUnstyled)
+import Grid exposing (..)
+import Html.Styled exposing (Attribute, Html, button, div, text, toUnstyled)
 import Html.Styled.Attributes exposing (css, style)
 
 
@@ -13,76 +13,81 @@ type alias Model =
     ()
 
 
-headerGridItem : Grid.Area
-headerGridItem =
-    Grid.gridArea "header"
+headerGridArea : GridArea
+headerGridArea =
+    gridArea "header"
 
 
-navGridItem : Grid.Area
-navGridItem =
-    Grid.gridArea "nav"
+navGridArea : GridArea
+navGridArea =
+    gridArea "nav"
 
 
-contentGridItem : Grid.Area
-contentGridItem =
-    Grid.gridArea "content"
+contentGridArea : GridArea
+contentGridArea =
+    gridArea "content"
 
 
-footerGridItem : Grid.Area
-footerGridItem =
-    Grid.gridArea "footer"
+footerGridArea : GridArea
+footerGridArea =
+    gridArea "footer"
 
 
 {-| all rows will be []
 -}
-gridTemplateBad : Grid.GridTemplate
+gridTemplateBad : GridTemplate
 gridTemplateBad =
-    Grid.template
-        (Array2D.fromList [ [ headerGridItem ], [], [ navGridItem ], [ footerGridItem ] ])
+    template
+        (Array2D.fromList [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ])
         []
         []
 
 
 {-| second contentGridItem is ignored
 -}
-gridTemplateBad_ : Grid.GridTemplate
+gridTemplateBad_ : GridTemplate
 gridTemplateBad_ =
-    Grid.template
-        (Array2D.fromList [ [ headerGridItem ], [ contentGridItem, contentGridItem ], [ navGridItem ], [ footerGridItem ] ])
+    template
+        (Array2D.fromList [ [ headerGridArea ], [ contentGridArea, contentGridArea ], [ navGridArea ], [ footerGridArea ] ])
         []
         []
 
 
-gridTemplateBig : Grid.GridTemplate
+gridTemplateBig : GridTemplate
 gridTemplateBig =
-    Grid.template
+    template
         (Array2D.fromList
-            [ [ headerGridItem, navGridItem, navGridItem ]
-            , [ contentGridItem, contentGridItem, contentGridItem ]
-            , [ footerGridItem, footerGridItem, footerGridItem ]
+            [ [ headerGridArea, navGridArea, navGridArea ]
+            , [ contentGridArea, contentGridArea, contentGridArea ]
+            , [ footerGridArea, footerGridArea, footerGridArea ]
             ]
         )
         [ "1fr", "4fr", "1fr" ]
         [ "1fr", "1fr", "1fr" ]
 
 
-gridTemplateSmall : Grid.GridTemplate
+gridTemplateSmall : GridTemplate
 gridTemplateSmall =
-    Grid.template
+    template
         (Array2D.fromList
-            [ [ headerGridItem ]
-            , [ contentGridItem ]
-            , [ navGridItem ]
-            , [ footerGridItem ]
+            [ [ headerGridArea ]
+            , [ contentGridArea ]
+            , [ navGridArea ]
+            , [ footerGridArea ]
             ]
         )
         [ "1fr", "4fr", "1fr", "1fr" ]
         [ "1fr" ]
 
 
-myContainer : Grid.GridContainer
-myContainer =
-    Grid.container [ ( [ only screen [ Media.minWidth (px 501) ] ], gridTemplateBig ) ]
+big : MediaQueryWithGridTemplate
+big =
+    ( [ only screen [ Media.minWidth (px 501) ] ], gridTemplateBig )
+
+
+small : MediaQueryWithGridTemplate
+small =
+    ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateBig )
 
 
 
@@ -101,12 +106,12 @@ update msg model =
 
 view : Model -> Html.Styled.Html msg
 view model =
-    -- TODO
-    Grid.gridContainer
-        [ ]
-        [ Grid.gridElement "button" (panel "button ")
-        , Grid.gridElement "url" (panel "url ")
-        , Grid.gridElement "main" (panel "main ")
+    container [ big, small ]
+        []
+        [ gridElement headerGridArea (panel "header ")
+        , gridElement navGridArea (panel "nav ")
+        , gridElement contentGridArea (panel "content ")
+        , gridElement footerGridArea (panel "footer ")
         ]
 
 
