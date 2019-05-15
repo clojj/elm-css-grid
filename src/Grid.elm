@@ -5,20 +5,19 @@ import Css exposing (Style, property, px)
 import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
-import Tagged exposing (Tagged(..))
 
 
-type GridArea
-    = GridArea
+type GridArea a
+    = GridArea String
 
 
 type alias Area =
-    Tagged GridArea String
+    GridArea String
 
 
 gridArea : String -> Area
 gridArea name =
-    Tagged name
+    GridArea name
 
 -- TODO
 type alias RowSize = String
