@@ -43,8 +43,8 @@ gridTemplateBig =
         , [ contentGridArea, contentGridArea, contentGridArea ]
         , [ footerGridArea, footerGridArea, footerGridArea ]
         ]
-        [ "1fr", "4fr", "1fr" ]
-        [ "1fr", "1fr", "1fr" ]
+        [ fr 1, fr 4, fr 1 ]
+        [ fr 1, fr 1, fr 1 ]
 
 
 gridTemplateSmall : GridAreasTemplate
@@ -55,8 +55,8 @@ gridTemplateSmall =
         , [ navGridArea ]
         , [ footerGridArea ]
         ]
-        [ "1fr", "4fr", "1fr", "1fr" ]
-        [ "1fr" ]
+        [ fr 1, fr 4, fr 1, fr 1 ]
+        [ fr 1 ]
 
 
 bigScreenTemplate : MediaQueryWithGridAreasTemplate

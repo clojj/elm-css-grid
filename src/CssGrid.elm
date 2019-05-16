@@ -1,4 +1,4 @@
-module CssGrid exposing (GridArea, GridAreaElement, GridAreasTemplate, MediaQueryWithGridAreasTemplate, gridArea, gridAreasContainer, gridAreaElement, gridAreasTemplate)
+module CssGrid exposing (GridArea, GridAreaElement, GridAreasTemplate, MediaQueryWithGridAreasTemplate, gridArea, gridAreasContainer, gridAreaElement, gridAreasTemplate, fr, Fractions)
 
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
@@ -25,15 +25,15 @@ gridArea : String -> GridArea
 gridArea name =
     GridArea name
 
+fr : Int -> Fractions
+fr value =
+    Fractions <| (String.fromInt value) ++ "fr"
 
--- TODO types: "1fr" "42px" "8ch" "auto"
-type alias RowSize =
-    String
 
-
--- TODO types: "1fr" "42px" "8ch" "auto"
-type alias ColSize =
-    String
+-- TODO types: "42px" "8ch" "auto", etc.
+-- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
+-- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
+type Fractions = Fractions String
 
 
 type alias Areas =
@@ -43,10 +43,10 @@ type alias Areas =
 {-| Represents the [grid-template-areas](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas) definition, including the [grid-template-rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows) and [grid-template-columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) definitions.
 -}
 type GridAreasTemplate
-    = GridTemplate Areas (List RowSize) (List ColSize)
+    = GridTemplate Areas (List Fractions) (List Fractions)
 
 
-gridAreasTemplate : Areas -> List RowSize -> List ColSize -> GridAreasTemplate
+gridAreasTemplate : Areas -> List Fractions -> List Fractions -> GridAreasTemplate
 gridAreasTemplate areas rowSizes colSizes =
     GridTemplate areas rowSizes colSizes
 
@@ -64,21 +64,15 @@ type GridAreaElement msg
         }
 
 
-getGridAreaName : GridArea -> String
-getGridAreaName (GridArea name) =
-    name
-
-
 renderGridAreaElement : GridAreaElement msg -> Html msg
 renderGridAreaElement gridElem =
     case gridElem of
         GridElement { area, children } ->
             let
-                areaName =
-                    getGridAreaName area
+                (GridArea name) = area
             in
             div
-                [ css [ property "grid-area" areaName ] ]
+                [ css [ property "grid-area" name ] ]
                 children
 
 
@@ -111,13 +105,13 @@ gridAreasTemplateToStyle : GridAreasTemplate -> Style
 gridAreasTemplateToStyle (GridTemplate areas rows cols) =
     let
         areaRows =
-            List.map (\gridAreas -> String.join " " (List.map getGridAreaName gridAreas)) areas
+            List.map (\gridAreas -> String.join " " (List.map (\(GridArea n) -> n) gridAreas)) areas
 
         rowSizes =
-            String.join " " rows
+            String.join " " (List.map (\(Fractions s) -> s) rows)
 
         colSizes =
-            String.join " " cols
+            String.join " " (List.map (\(Fractions s) -> s) cols)
     in
     Css.batch
         [ property "display" "grid"
