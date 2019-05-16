@@ -1,5 +1,6 @@
-module Main exposing (Model, bigScreenTemplate, contentGridArea, footerGridArea, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, navGridArea, smallScreenTemplate, testPanel, update, view)
+module Main exposing (Model, bigScreenTemplate, bootstrapPanel, gridTemplateBig, gridTemplateSmall, initialModel, main, smallScreenTemplate, testPanel, update, view)
 
+import Areas exposing (contArea, footArea, headArea, naviArea)
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.ListGroup as ListGroup
@@ -7,41 +8,24 @@ import Browser
 import Css exposing (border3, px, rgb, solid)
 import Css.Media as Media exposing (MediaQuery, only, screen)
 import CssGrid exposing (..)
+import CssGrid.Areas exposing (gridAreaElement)
+import CssGrid.Sizes exposing (..)
 import Html
 import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
+import Simple exposing (viewNested)
 
 
 type alias Model =
     ()
 
 
-headerGridArea : GridArea
-headerGridArea =
-    gridArea "header"
-
-
-navGridArea : GridArea
-navGridArea =
-    gridArea "nav"
-
-
-contentGridArea : GridArea
-contentGridArea =
-    gridArea "content"
-
-
-footerGridArea : GridArea
-footerGridArea =
-    gridArea "footer"
-
-
 gridTemplateBig : GridAreasTemplate
 gridTemplateBig =
     gridAreasTemplate
-        [ [ headerGridArea, navGridArea, navGridArea ]
-        , [ contentGridArea, contentGridArea, contentGridArea ]
-        , [ footerGridArea, footerGridArea, footerGridArea ]
+        [ [ headArea, naviArea, naviArea ]
+        , [ contArea, contArea, contArea ]
+        , [ footArea, footArea, footArea ]
         ]
         [ fr 1, fr 4, fr 1 ]
         [ fr 1, fr 1, fr 1 ]
@@ -50,10 +34,10 @@ gridTemplateBig =
 gridTemplateSmall : GridAreasTemplate
 gridTemplateSmall =
     gridAreasTemplate
-        [ [ headerGridArea ]
-        , [ contentGridArea ]
-        , [ navGridArea ]
-        , [ footerGridArea ]
+        [ [ headArea ]
+        , [ contArea ]
+        , [ naviArea ]
+        , [ footArea ]
         ]
         [ fr 1, fr 4, fr 1, fr 1 ]
         [ fr 1 ]
@@ -80,13 +64,13 @@ update _ model =
 
 
 view : Model -> Html.Styled.Html msg
-view _ =
+view model =
     gridAreasContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
-        [ gridAreaElement headerGridArea (testPanel "header ")
-        , gridAreaElement navGridArea (testPanel "nav ")
-        , gridAreaElement contentGridArea [ fromUnstyled CDN.stylesheet, bootstrapPanel ]
-        , gridAreaElement footerGridArea (testPanel "footer ")
+        [ gridAreaElement headArea (testPanel "header ")
+        , gridAreaElement naviArea (testPanel "nav ")
+        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
+        , gridAreaElement footArea (testPanel "footer ")
         ]
 
 
@@ -103,7 +87,7 @@ bootstrapPanel =
 
 testPanel : String -> List (Html msg)
 testPanel name =
-    [ div [ css [ border3 (px 3) solid (rgb 50 50 50) ] ] (List.repeat 15 (text name)) ]
+    [ div [ css [ border3 (px 3) solid (rgb 50 50 50) ] ] (List.repeat 2 (text name)) ]
 
 
 main : Program () Model msg

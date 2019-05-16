@@ -1,94 +1,26 @@
-module CssGrid exposing (GridArea, GridAreaElement, GridAreasTemplate, MediaQueryWithGridAreasTemplate, gridArea, gridAreasContainer, gridAreaElement, gridAreasTemplate, fr, Fractions)
+module CssGrid exposing (GridAreasTemplate, MediaQueryWithGridAreasTemplate, gridAreasContainer, gridAreasTemplate)
 
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
+import CssGrid.Areas as Areas exposing (Areas, GridArea, GridAreaElement, gridAreaElementArea, gridAreaElementChildren)
+import CssGrid.Sizes as Sizes exposing (Fraction)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
 
-{-| Represents a [grid-area](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-area), uniquely identified by a name.
--}
-type GridArea
-    = GridArea String
-
-
-{-| Constructs a `GridArea` which is uniquely identified by name.
-The name of the grid-area must be unique for the entire view.
-
-    gridArea "header"
-
-The resulting GridArea will be appear in the resulting CSS in two places:
-1. As a substring in the list-of-strings-value of the `grid-template-areas` property (aka CSS Grid container definition)
-2. As the value of a `grid-area` property
--}
-gridArea : String -> GridArea
-gridArea name =
-    GridArea name
-
-fr : Int -> Fractions
-fr value =
-    Fractions <| (String.fromInt value) ++ "fr"
-
-
--- TODO types: "42px" "8ch" "auto", etc.
--- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
--- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
-type Fractions = Fractions String
-
-
-type alias Areas =
-    List (List GridArea)
-
--- TODO alternate definition with typed row-/column-sizes
 {-| Represents the [grid-template-areas](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas) definition, including the [grid-template-rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows) and [grid-template-columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) definitions.
 -}
 type GridAreasTemplate
-    = GridTemplate Areas (List Fractions) (List Fractions)
+    = GridTemplate Areas (List Fraction) (List Fraction)
 
 
-gridAreasTemplate : Areas -> List Fractions -> List Fractions -> GridAreasTemplate
+gridAreasTemplate : Areas -> List Fraction -> List Fraction -> GridAreasTemplate
 gridAreasTemplate areas rowSizes colSizes =
     GridTemplate areas rowSizes colSizes
 
 
 type alias MediaQueryWithGridAreasTemplate =
     ( List MediaQuery, GridAreasTemplate )
-
-
-{-| Opaque type representing a grid-area element
--}
-type GridAreaElement msg
-    = GridElement
-        { area : GridArea
-        , children : List (Html msg)
-        }
-
-
-renderGridAreaElement : GridAreaElement msg -> Html msg
-renderGridAreaElement gridElem =
-    case gridElem of
-        GridElement { area, children } ->
-            let
-                (GridArea name) = area
-            in
-            div
-                [ css [ property "grid-area" name ] ]
-                children
-
-
-{-| Creates a grid-area element that gets its grid-position by the area's name
--}
-gridAreaElement : GridArea -> List (Html msg) -> GridAreaElement msg
-gridAreaElement area children =
-    GridElement
-        { area = area
-        , children = children
-        }
-
-
-toMediaStyle : List MediaQuery -> Style -> Style
-toMediaStyle mediaQuery style =
-    withMedia mediaQuery [ style ]
 
 
 gridAreasContainer : List MediaQueryWithGridAreasTemplate -> List (Attribute msg) -> List (GridAreaElement msg) -> Html msg
@@ -101,17 +33,22 @@ gridAreasContainer mappings attributes children =
         (List.map renderGridAreaElement children)
 
 
+toMediaStyle : List MediaQuery -> Style -> Style
+toMediaStyle mediaQuery style =
+    withMedia mediaQuery [ style ]
+
+
 gridAreasTemplateToStyle : GridAreasTemplate -> Style
 gridAreasTemplateToStyle (GridTemplate areas rows cols) =
     let
         areaRows =
-            List.map (\gridAreas -> String.join " " (List.map (\(GridArea n) -> n) gridAreas)) areas
+            List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
 
         rowSizes =
-            String.join " " (List.map (\(Fractions s) -> s) rows)
+            String.join " " (List.map Sizes.fractionToString rows)
 
         colSizes =
-            String.join " " (List.map (\(Fractions s) -> s) cols)
+            String.join " " (List.map Sizes.fractionToString cols)
     in
     Css.batch
         [ property "display" "grid"
@@ -122,3 +59,10 @@ gridAreasTemplateToStyle (GridTemplate areas rows cols) =
         , property "grid-template-columns" colSizes
         , property "grid-column-gap" "10px"
         ]
+
+
+renderGridAreaElement : GridAreaElement msg -> Html msg
+renderGridAreaElement gridElem =
+    div
+        [ css [ property "grid-area" (Areas.toString (gridAreaElementArea gridElem)) ] ]
+        (gridAreaElementChildren gridElem)
