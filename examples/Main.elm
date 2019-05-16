@@ -1,4 +1,4 @@
-module Main exposing (Model, contentGridArea, footerGridArea, gridTemplateBad, gridTemplateBad_, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, navGridArea, update, view)
+module Main exposing (..)
 
 import Browser
 import Css exposing (border3, px, rgb, solid)
@@ -32,7 +32,13 @@ footerGridArea =
     gridArea "footer"
 
 
-gridTemplateBad : GridTemplate -- TODO test
+gridTemplateBad : GridTemplate
+
+
+
+-- TODO test
+
+
 gridTemplateBad =
     template
         [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ]
@@ -40,7 +46,13 @@ gridTemplateBad =
         []
 
 
-gridTemplateBad_ : GridTemplate -- TODO test
+gridTemplateBad_ : GridTemplate
+
+
+
+-- TODO test
+
+
 gridTemplateBad_ =
     template
         [ [ headerGridArea ]
@@ -82,7 +94,7 @@ big =
 
 small : MediaQueryWithGridTemplate
 small =
-    ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateBig )
+    ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateSmall )
 
 
 
@@ -101,7 +113,7 @@ update msg model =
 
 view : Model -> Html.Styled.Html msg
 view model =
-    container [ big, small ]
+    gridContainer [ big, small ]
         []
         [ gridElement headerGridArea (panel "header ")
         , gridElement navGridArea (panel "nav ")

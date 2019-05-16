@@ -1,8 +1,7 @@
-module Grid exposing (GridArea, GridElement, GridTemplate, MediaQueryWithGridTemplate, container, gridArea, gridContainer, gridElement, template)
+module Grid exposing (GridArea, GridElement, GridTemplate, MediaQueryWithGridTemplate, gridArea, gridContainer, gridElement, template)
 
-import Array exposing (Array)
-import Css exposing (Style, property, px)
-import Css.Media as Media exposing (MediaQuery, only, screen, withMedia)
+import Css exposing (Style, property)
+import Css.Media exposing (MediaQuery, withMedia)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
@@ -16,16 +15,8 @@ gridArea name =
     GridArea name
 
 
-
--- TODO
-
-
 type alias RowSize =
     String
-
-
-
--- TODO
 
 
 type alias ColSize =
@@ -86,11 +77,16 @@ gridElement area children =
         }
 
 
-container : List MediaQueryWithGridTemplate -> List (Attribute msg) -> List (GridElement msg) -> Html msg
-container mappings attributes children =
+toMediaStyle : List MediaQuery -> Style -> Style
+toMediaStyle mediaQuery style =
+    withMedia mediaQuery [ style ]
+
+
+gridContainer : List MediaQueryWithGridTemplate -> List (Attribute msg) -> List (GridElement msg) -> Html msg
+gridContainer mappings attributes children =
     let
         styles =
-            []
+            List.map (\( mediaQuery, gridTemlate ) -> toMediaStyle mediaQuery (gridTemplateToStyle gridTemlate)) mappings
     in
     div ([ css styles ] ++ attributes)
         (List.map renderGridElement children)
@@ -98,52 +94,22 @@ container mappings attributes children =
 
 gridTemplateToStyle : GridTemplate -> Style
 gridTemplateToStyle (GridTemplate areas rows cols) =
-    -- TODO
-    let areaRows =  List.map (\gridAreas -> List.map getGridAreaName gridAreas) areas
+    let
+        areaRows =
+            List.map (\gridAreas -> String.join " " (List.map getGridAreaName gridAreas)) areas
+
+        rowSizes =
+            String.join " " rows
+
+        colSizes =
+            String.join " " cols
     in
-        Css.batch
-            [ property "display" "grid"
-            , property "width" "100%"
-            , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
-            , property "grid-template-rows" rows
-            , property "grid-row-gap" "10px"
-            , property "grid-template-columns" cols
-            , property "grid-column-gap" "10px"
-            ]
-
-
-
--- TODO remove / reuse names
-
-
-{-| Creates a grid-container with grid-area-template(s)
--}
-gridContainer : List (Attribute msg) -> List (GridElement msg) -> Html msg
-gridContainer attributes children =
-    div ([ css [ contentBig, contentSmall ] ] ++ attributes)
-        (List.map renderGridElement children)
-
-
-contentBig : Style
-contentBig =
-    withMedia [ only screen [ Media.minWidth (px 501) ] ]
-        [ gridTemplate [ "button url url", "main main main" ] "1fr 5fr" "1fr 2fr 2fr" ]
-
-
-contentSmall : Style
-contentSmall =
-    withMedia [ only screen [ Media.maxWidth (px 500) ] ]
-        [ gridTemplate [ "button", "main", "url" ] "1fr 3fr 1fr" "1fr" ]
-
-
-gridTemplate : List String -> String -> String -> Style
-gridTemplate areas rows cols =
     Css.batch
         [ property "display" "grid"
         , property "width" "100%"
-        , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areas)
-        , property "grid-template-rows" rows
+        , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
+        , property "grid-template-rows" rowSizes
         , property "grid-row-gap" "10px"
-        , property "grid-template-columns" cols
+        , property "grid-template-columns" colSizes
         , property "grid-column-gap" "10px"
         ]
