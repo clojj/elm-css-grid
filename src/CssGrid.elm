@@ -1,4 +1,4 @@
-module Grid exposing (GridArea, GridElement, GridTemplate, MediaQueryWithGridTemplate, gridArea, gridContainer, gridElement, template)
+module CssGrid exposing (GridArea, GridElement, GridTemplate, MediaQueryWithGridTemplate, gridArea, gridContainer, gridElement, gridTemplate)
 
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
@@ -31,8 +31,8 @@ type GridTemplate
     = GridTemplate Areas (List RowSize) (List ColSize)
 
 
-template : Areas -> List RowSize -> List ColSize -> GridTemplate
-template areas rowSizes colSizes =
+gridTemplate : Areas -> List RowSize -> List ColSize -> GridTemplate
+gridTemplate areas rowSizes colSizes =
     GridTemplate areas rowSizes colSizes
 
 

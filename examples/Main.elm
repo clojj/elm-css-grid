@@ -3,7 +3,7 @@ module Main exposing (Model, bigScreenTemplate, contentGridArea, footerGridArea,
 import Browser
 import Css exposing (border3, px, rgb, solid)
 import Css.Media as Media exposing (MediaQuery, only, screen)
-import Grid exposing (..)
+import CssGrid exposing (..)
 import Html.Styled exposing (Attribute, Html, div, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
 
@@ -34,7 +34,7 @@ footerGridArea =
 
 gridTemplateBig : GridTemplate
 gridTemplateBig =
-    template
+    gridTemplate
         [ [ headerGridArea, navGridArea, navGridArea ]
         , [ contentGridArea, contentGridArea, contentGridArea ]
         , [ footerGridArea, footerGridArea, footerGridArea ]
@@ -45,7 +45,7 @@ gridTemplateBig =
 
 gridTemplateSmall : GridTemplate
 gridTemplateSmall =
-    template
+    gridTemplate
         [ [ headerGridArea ]
         , [ contentGridArea ]
         , [ navGridArea ]

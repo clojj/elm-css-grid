@@ -1,10 +1,13 @@
 {
-    "type": "application",
-    "source-directories": [
-        "src",
-        "examples"
+    "type": "package",
+    "name": "clojj/elm-css-grid",
+    "summary": "Provides CSS Grid layout",
+    "license": "BSD-3-Clause",
+    "version": "1.0.0",
+    "exposed-modules": [
+        "CssGrid"
     ],
-    "elm-version": "0.19.0",
+    "elm-version": "0.19.0 <= v < 0.20.0",
     "dependencies": {
         "direct": {
             "elm/browser": "1.0.1",
