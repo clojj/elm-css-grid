@@ -6,10 +6,17 @@ import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
 
+{-| Represents an CSS Grid area, identified by a name of type `String`
+-}
 type GridArea
     = GridArea String
 
 
+{-| Constructs a `GridArea` from a name of type `String`.
+The name must be unique for the entire view.
+
+    gridArea "header" == GridArea "header"
+-}
 gridArea : String -> GridArea
 gridArea name =
     GridArea name

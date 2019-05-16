@@ -1,10 +1,14 @@
 module Main exposing (Model, bigScreenTemplate, contentGridArea, footerGridArea, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, navGridArea, smallScreenTemplate, testPanel, update, view)
 
+import Bootstrap.CDN as CDN
+import Bootstrap.Card as Card
+import Bootstrap.ListGroup as ListGroup
 import Browser
 import Css exposing (border3, px, rgb, solid)
 import Css.Media as Media exposing (MediaQuery, only, screen)
 import CssGrid exposing (..)
-import Html.Styled exposing (Attribute, Html, div, text, toUnstyled)
+import Html
+import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
 
 
@@ -81,9 +85,20 @@ view _ =
         []
         [ gridElement headerGridArea (testPanel "header ")
         , gridElement navGridArea (testPanel "nav ")
-        , gridElement contentGridArea (testPanel "content ")
+        , gridElement contentGridArea [ fromUnstyled CDN.stylesheet, bootstrapPanel ]
         , gridElement footerGridArea (testPanel "footer ")
         ]
+
+
+bootstrapPanel =
+    Card.config []
+        |> Card.listGroup
+            [ ListGroup.li [ ListGroup.success ] [ Html.text "Cras justo odio" ]
+            , ListGroup.li [ ListGroup.info ] [ Html.text "Dapibus ac facilisis in" ]
+            , ListGroup.li [ ListGroup.warning ] [ Html.text "Vestibulum at eros" ]
+            ]
+        |> Card.view
+        |> fromUnstyled
 
 
 testPanel : String -> List (Html msg)
