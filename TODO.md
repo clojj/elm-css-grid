@@ -1,3 +1,5 @@
+rename or remove module `CssGrid`
+-
 
 parameterize by fixed responsive 'profile' ("best-practices" media-queries) ?
 -
@@ -5,24 +7,6 @@ parameterize by fixed responsive 'profile' ("best-practices" media-queries) ?
 test invalid templates.. add some validations ?
 -
 
-```
-gridTemplateBad : GridTemplate
-gridTemplateBad =
-    template
-        [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ]
-        []
-        []
-```
+- 'bad' templates can be defined, if the areas column- or row-length differs from any grid-template-rows/columns 
 
-```
-gridTemplateBad_ : GridTemplate
-gridTemplateBad_ =
-    template
-        [ [ headerGridArea ]
-        , [ contentGridArea, contentGridArea ]
-        , [ navGridArea ]
-        , [ footerGridArea ]
-        ]
-        []
-        []
-```
+- 'bad' templates can be defined, if the areas are do not shape a square (or ?)
