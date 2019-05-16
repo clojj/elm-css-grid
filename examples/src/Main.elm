@@ -36,9 +36,9 @@ footerGridArea =
     gridArea "footer"
 
 
-gridTemplateBig : GridTemplate
+gridTemplateBig : GridAreasTemplate
 gridTemplateBig =
-    gridTemplate
+    gridAreasTemplate
         [ [ headerGridArea, navGridArea, navGridArea ]
         , [ contentGridArea, contentGridArea, contentGridArea ]
         , [ footerGridArea, footerGridArea, footerGridArea ]
@@ -47,9 +47,9 @@ gridTemplateBig =
         [ "1fr", "1fr", "1fr" ]
 
 
-gridTemplateSmall : GridTemplate
+gridTemplateSmall : GridAreasTemplate
 gridTemplateSmall =
-    gridTemplate
+    gridAreasTemplate
         [ [ headerGridArea ]
         , [ contentGridArea ]
         , [ navGridArea ]
@@ -59,12 +59,12 @@ gridTemplateSmall =
         [ "1fr" ]
 
 
-bigScreenTemplate : MediaQueryWithGridTemplate
+bigScreenTemplate : MediaQueryWithGridAreasTemplate
 bigScreenTemplate =
     ( [ only screen [ Media.minWidth (px 501) ] ], gridTemplateBig )
 
 
-smallScreenTemplate : MediaQueryWithGridTemplate
+smallScreenTemplate : MediaQueryWithGridAreasTemplate
 smallScreenTemplate =
     ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateSmall )
 
@@ -81,12 +81,12 @@ update _ model =
 
 view : Model -> Html.Styled.Html msg
 view _ =
-    gridContainer [ bigScreenTemplate, smallScreenTemplate ]
+    gridAreasContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
-        [ gridElement headerGridArea (testPanel "header ")
-        , gridElement navGridArea (testPanel "nav ")
-        , gridElement contentGridArea [ fromUnstyled CDN.stylesheet, bootstrapPanel ]
-        , gridElement footerGridArea (testPanel "footer ")
+        [ gridAreaElement headerGridArea (testPanel "header ")
+        , gridAreaElement navGridArea (testPanel "nav ")
+        , gridAreaElement contentGridArea [ fromUnstyled CDN.stylesheet, bootstrapPanel ]
+        , gridAreaElement footerGridArea (testPanel "footer ")
         ]
 
 
