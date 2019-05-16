@@ -1,6 +1,10 @@
-module Areas exposing (contArea, footArea, headArea, naviArea)
+module Areas exposing (cont, contArea, foot, footArea, head, headArea, navi, naviArea)
 
 import CssGrid.Areas exposing (GridArea, gridArea)
+
+
+
+{- Some globally unique area names -}
 
 
 headArea : GridArea
@@ -20,4 +24,24 @@ contArea =
 
 footArea : GridArea
 footArea =
+    gridArea "footer"
+
+
+head : GridArea
+head =
+    gridArea "header"
+
+
+navi : GridArea
+navi =
+    gridArea "nav"
+
+
+cont : GridArea
+cont =
+    gridArea "content"
+
+
+foot : GridArea
+foot =
     gridArea "footer"

@@ -1,35 +1,12 @@
 module Simple exposing (gridTemplateBig, viewNested)
 
+import Areas exposing (cont, foot, head, navi)
 import Css exposing (px)
 import Css.Media as Media exposing (only, screen)
 import CssGrid.Areas exposing (GridArea, gridArea, gridAreaElement)
 import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (fr, gapPx)
 import Html.Styled exposing (text)
-
-
-
--- TODO write an example view and include as nested grid in Main's contArea
-
-
-head : GridArea
-head =
-    gridArea "header"
-
-
-navi : GridArea
-navi =
-    gridArea "nav"
-
-
-cont : GridArea
-cont =
-    gridArea "content"
-
-
-foot : GridArea
-foot =
-    gridArea "footer"
 
 
 gridTemplateBig : SimpleTemplate
