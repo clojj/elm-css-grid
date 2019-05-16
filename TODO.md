@@ -9,4 +9,4 @@ test invalid templates.. add some validations ?
 
 - 'bad' templates can be defined, if the areas column- or row-length differs from any grid-template-rows/columns 
 
-- 'bad' templates can be defined, if the areas are do not shape a square (or ?)
+- 'bad' templates can be defined, if the areas are do not shape a rectangle
