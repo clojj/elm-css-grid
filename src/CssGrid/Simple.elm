@@ -10,7 +10,7 @@ import Html.Styled.Attributes exposing (css)
 
 
 -- TODO common template: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout
--- TODO template with Int fractionals only ?
+-- TODO define template with Int fractionals only ?
 
 
 {-| Represents a minimal fraction-based layout with area names and a grid-gap.
