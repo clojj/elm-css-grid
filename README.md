@@ -1,7 +1,7 @@
 Proof-Of-Concept for a _typed_ CSS Grid package
 =
 
-Based on ```rtfeldman/elm-css```, this package will eventually provide typesafe and -responsive-by-nature- layout of Html, based on the *CSS Grid specification*.
+Based on ```rtfeldman/elm-css```, this package will eventually provide typesafe and responsive-by-nature layout of Html, based on the *CSS Grid specification*.
 
 See ```examples/``` folder for usage.
 
