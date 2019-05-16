@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (Model, big, contentGridArea, footerGridArea, gridTemplateBig, gridTemplateSmall, headerGridArea, initialModel, main, navGridArea, small, testPanel, update, view)
 
 import Browser
 import Css exposing (border3, px, rgb, solid)
@@ -30,38 +30,6 @@ contentGridArea =
 footerGridArea : GridArea
 footerGridArea =
     gridArea "footer"
-
-
-gridTemplateBad : GridTemplate
-
-
-
--- TODO test
-
-
-gridTemplateBad =
-    template
-        [ [ headerGridArea ], [], [ navGridArea ], [ footerGridArea ] ]
-        []
-        []
-
-
-gridTemplateBad_ : GridTemplate
-
-
-
--- TODO test
-
-
-gridTemplateBad_ =
-    template
-        [ [ headerGridArea ]
-        , [ contentGridArea, contentGridArea ]
-        , [ navGridArea ]
-        , [ footerGridArea ]
-        ]
-        []
-        []
 
 
 gridTemplateBig : GridTemplate
@@ -97,33 +65,29 @@ small =
     ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateSmall )
 
 
-
--- TODO construct grid-container for example view
-
-
 initialModel : Model
 initialModel =
     ()
 
 
 update : msg -> Model -> Model
-update msg model =
+update _ model =
     model
 
 
 view : Model -> Html.Styled.Html msg
-view model =
+view _ =
     gridContainer [ big, small ]
         []
-        [ gridElement headerGridArea (panel "header ")
-        , gridElement navGridArea (panel "nav ")
-        , gridElement contentGridArea (panel "content ")
-        , gridElement footerGridArea (panel "footer ")
+        [ gridElement headerGridArea (testPanel "header ")
+        , gridElement navGridArea (testPanel "nav ")
+        , gridElement contentGridArea (testPanel "content ")
+        , gridElement footerGridArea (testPanel "footer ")
         ]
 
 
-panel : String -> List (Html msg)
-panel name =
+testPanel : String -> List (Html msg)
+testPanel name =
     [ div [ css [ border3 (px 3) solid (rgb 50 50 50) ] ] (List.repeat 15 (text name)) ]
 
 
