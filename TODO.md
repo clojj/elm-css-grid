@@ -1,3 +1,8 @@
+row-sizes not working ?
+-
+
+see https://codepen.io/clojj/pen/pmwWvL?&editable=true
+
 spec for sizes
 -
 
