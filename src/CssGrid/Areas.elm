@@ -55,10 +55,10 @@ gridAreaElement area children =
 
 
 gridAreaElementArea : GridAreaElement msg -> GridArea
-gridAreaElementArea (GridAreaElement { area, children }) =
+gridAreaElementArea (GridAreaElement { area }) =
     area
 
 
 gridAreaElementChildren : GridAreaElement msg -> List (Html msg)
-gridAreaElementChildren (GridAreaElement { area, children }) =
+gridAreaElementChildren (GridAreaElement { children }) =
     children
