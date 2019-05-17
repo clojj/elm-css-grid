@@ -1,8 +1,65 @@
-module CssGrid.Sizes exposing (Fraction, Gap, fr, gapPx, gapToString, fractionToString)
+module CssGrid.Sizes exposing (Auto, Fraction, Gap, Length, MinMax, cm, fr, fractionToString, gapPx, gapToString, lengthToString, minmax, px)
 
--- TODO types: "42px" "8ch" "auto", etc.
--- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
--- see https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
+-- minmax(min, max)
+
+
+type MinMax
+    = MinMax String
+
+
+minmax : Length a String -> Length b String -> MinMax
+minmax min max =
+    MinMax <| "minmax(" ++ lengthToString min ++ ", " ++ lengthToString max ++ ")"
+
+
+minmaxToString : MinMax -> String
+minmaxToString (MinMax value) =
+    value
+
+
+
+-- TODO type <percentage>
+
+
+{-| auto
+-}
+type Auto
+    = Auto
+
+
+
+-- TODO types <length>
+
+
+type Px
+    = Px
+
+
+type Cm
+    = Cm
+
+
+type Length unit value
+    = Length value
+
+
+px : Int -> Length Px String
+px length =
+    Length <| String.fromInt length ++ "px"
+
+
+cm : Float -> Length Cm String
+cm length =
+    Length <| String.fromFloat length ++ "cm"
+
+
+lengthToString : Length unit String -> String
+lengthToString (Length value) =
+    value
+
+
+
+-- type <flex> TODO as Length ?
 
 
 type Fraction
@@ -19,10 +76,6 @@ fractionToString (Fraction value) =
     value
 
 
-
--- TODO types <length> and <percentage>
-
-
 type Gap
     = Gap String
 
@@ -31,7 +84,8 @@ gapToString : Gap -> String
 gapToString (Gap value) =
     value
 
+-- TODO Length parameter
 
 gapPx : Int -> Gap
-gapPx px =
-    Gap <| String.fromInt px ++ "px"
+gapPx length =
+    Gap <| String.fromInt length ++ "px"

@@ -5,7 +5,7 @@ import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.ListGroup as ListGroup
 import Browser
-import Css exposing (border3, px, rgb, solid)
+import Css as Css
 import Css.Media as Media exposing (MediaQuery, only, screen)
 import CssGrid exposing (..)
 import CssGrid.Areas exposing (gridAreaElement)
@@ -45,12 +45,12 @@ gridTemplateSmall =
 
 bigScreenTemplate : MediaQueryWithGridAreasTemplate
 bigScreenTemplate =
-    ( [ only screen [ Media.minWidth (px 501) ] ], gridTemplateBig )
+    ( [ only screen [ Media.minWidth (Css.px 501) ] ], gridTemplateBig )
 
 
 smallScreenTemplate : MediaQueryWithGridAreasTemplate
 smallScreenTemplate =
-    ( [ only screen [ Media.maxWidth (px 500) ] ], gridTemplateSmall )
+    ( [ only screen [ Media.maxWidth (Css.px 500) ] ], gridTemplateSmall )
 
 
 initialModel : Model
@@ -87,7 +87,7 @@ bootstrapPanel =
 
 testPanel : String -> List (Html msg)
 testPanel name =
-    [ div [ css [ border3 (px 3) solid (rgb 50 50 50) ] ] (List.repeat 2 (text name)) ]
+    [ div [ css [ Css.border3 (Css.px 3) Css.solid (Css.rgb 50 50 50) ] ] (List.repeat 2 (text name)) ]
 
 
 main : Program () Model msg
