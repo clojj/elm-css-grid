@@ -38,7 +38,7 @@ gridTemplateSmall =
         , [ foot ]
         ]
         (gapPx 5)
-        [ fr 1 ]
+        []
 
 
 bigScreenTemplate : ResponsiveTemplate

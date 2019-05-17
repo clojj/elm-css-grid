@@ -65,14 +65,22 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
 
         colSizes =
             String.join " " (List.map Sizes.fractionToString cols)
+
+        templateCols =
+            case cols of
+                [] ->
+                    []
+
+                _ ->
+                    [ property "grid-template-columns" colSizes ]
     in
-    Css.batch
+    Css.batch <|
         [ property "display" "grid"
         , property "width" "100%"
         , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
         , property "grid-gap" (gapToString gap)
-        , property "grid-template-columns" colSizes
         ]
+            ++ templateCols
 
 
 renderGridAreaElement : GridAreaElement msg -> Html msg
