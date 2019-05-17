@@ -3,14 +3,13 @@ module CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContai
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
 import CssGrid.Areas as Areas exposing (Areas, GridAreaElement, gridAreaElementArea, gridAreaElementChildren)
-import CssGrid.Sizes as Sizes exposing (Fraction, Gap, gapToString)
+import CssGrid.Sizes exposing (Gap, Length, gapToString, lengthToString)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
 
 
 -- TODO common template: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout
--- TODO define template with Int fractionals only ?
 
 
 {-| Represents a minimal fraction-based layout with area names and a grid-gap.
@@ -30,10 +29,10 @@ See also this [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/C
 
 -}
 type SimpleTemplate
-    = SimpleTemplate Areas Gap (List Fraction)
+    = SimpleTemplate Areas Gap (List Length)
 
 
-simpleTemplate : Areas -> Gap -> List Fraction -> SimpleTemplate
+simpleTemplate : Areas -> Gap -> List Length -> SimpleTemplate
 simpleTemplate areas gap columnFractions =
     SimpleTemplate areas gap columnFractions
 
@@ -64,7 +63,7 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
             List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
 
         colSizes =
-            String.join " " (List.map Sizes.fractionToString cols)
+            String.join " " (List.map lengthToString cols)
 
         templateCols =
             case cols of

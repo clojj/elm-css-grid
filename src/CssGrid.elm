@@ -3,7 +3,7 @@ module CssGrid exposing (GridAreasTemplate, MediaQueryWithGridAreasTemplate, gri
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
 import CssGrid.Areas as Areas exposing (Areas, GridArea, GridAreaElement, gridAreaElementArea, gridAreaElementChildren)
-import CssGrid.Sizes as Sizes exposing (Fraction)
+import CssGrid.Sizes exposing (Length, lengthToString)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
@@ -11,10 +11,10 @@ import Html.Styled.Attributes exposing (css)
 {-| Represents the [grid-template-areas](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-areas) definition, including the [grid-template-rows](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows) and [grid-template-columns](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns) definitions.
 -}
 type GridAreasTemplate
-    = GridTemplate Areas (List Fraction) (List Fraction)
+    = GridTemplate Areas (List Length) (List Length)
 
 
-gridAreasTemplate : Areas -> List Fraction -> List Fraction -> GridAreasTemplate
+gridAreasTemplate : Areas -> List Length -> List Length -> GridAreasTemplate
 gridAreasTemplate areas rowSizes colSizes =
     GridTemplate areas rowSizes colSizes
 
@@ -45,10 +45,10 @@ gridAreasTemplateToStyle (GridTemplate areas rows cols) =
             List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
 
         rowSizes =
-            String.join " " (List.map Sizes.fractionToString rows)
+            String.join " " (List.map lengthToString rows)
 
         colSizes =
-            String.join " " (List.map Sizes.fractionToString cols)
+            String.join " " (List.map lengthToString cols)
     in
     Css.batch
         [ property "display" "grid"

@@ -1,36 +1,30 @@
-module Simple exposing (gridTemplateBig, viewNested)
+module Simple exposing (simpleTemplateBig, viewNested)
 
 import Areas exposing (cont, contLeft, contRight, foot, head, navi)
 import Css as Css
 import Css.Media as Media exposing (only, screen)
 import CssGrid.Areas exposing (GridArea, gridAreaElement)
 import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
-import CssGrid.Sizes exposing (fr, gapPx, px)
+import CssGrid.Sizes exposing (fr, gap, px)
 import Html.Styled exposing (Html, div, text)
 import Html.Styled.Attributes exposing (css)
 
 
-
--- TODO define template with Int fractionals only ?
-
-
-gridTemplateBig : SimpleTemplate
-gridTemplateBig =
+simpleTemplateBig : SimpleTemplate
+simpleTemplateBig =
     simpleTemplate
         [ [ head, navi, navi ]
         , [ contLeft, cont, contRight ]
+        , [ contLeft, cont, contRight ]
+        , [ contLeft, cont, contRight ]
         , [ foot, foot, foot ]
         ]
-        (gapPx 5)
-        [ fr 1, fr 3, fr 1 ]
+        (gap (px 3))
+        [ fr 1, fr 1, fr 1 ]
 
 
-
--- TODO 'grid-template-columns: 1fr' is implicit... use an empty list here
-
-
-gridTemplateSmall : SimpleTemplate
-gridTemplateSmall =
+simpleTemplateSmall : SimpleTemplate
+simpleTemplateSmall =
     simpleTemplate
         [ [ head ]
         , [ contLeft ]
@@ -39,18 +33,18 @@ gridTemplateSmall =
         , [ navi ]
         , [ foot ]
         ]
-        (gapPx 5)
+        (gap (px 5))
         []
 
 
 bigScreenTemplate : ResponsiveTemplate
 bigScreenTemplate =
-    ( [ only screen [ Media.minWidth (Css.px 201) ] ], gridTemplateBig )
+    ( [ only screen [ Media.minWidth (Css.px 401) ] ], simpleTemplateBig )
 
 
 smallScreenTemplate : ResponsiveTemplate
 smallScreenTemplate =
-    ( [ only screen [ Media.maxWidth (Css.px 200) ] ], gridTemplateSmall )
+    ( [ only screen [ Media.maxWidth (Css.px 400) ] ], simpleTemplateSmall )
 
 
 viewNested : () -> Html.Styled.Html msg

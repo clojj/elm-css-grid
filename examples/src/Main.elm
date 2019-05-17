@@ -27,7 +27,7 @@ gridTemplateBig =
         , [ contArea, contArea, contArea ]
         , [ footArea, footArea, footArea ]
         ]
-        [ fr 1, fr 4, fr 1 ]
+        [ fr 1, fr 8, fr 1 ]
         [ fr 1, fr 1, fr 1 ]
 
 
@@ -69,7 +69,8 @@ view model =
         []
         [ gridAreaElement headArea (testPanel "header ")
         , gridAreaElement naviArea (testPanel "nav ")
-        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
+--        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
+        , gridAreaElement contArea [ viewNested model ]
         , gridAreaElement footArea (testPanel "footer ")
         ]
 

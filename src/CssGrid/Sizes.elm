@@ -1,24 +1,20 @@
-module CssGrid.Sizes exposing (Auto, Fraction, Gap, Length, MinMax, cm, fr, fractionToString, gapPx, gapToString, lengthToString, minmax, px, Px, Cm)
+module CssGrid.Sizes exposing (Auto, Gap, Length, MinMax, fr, gap, gapToString, lengthToString, minmax, minmaxToString, px)
 
 -- minmax(min, max)
 
 
 type MinMax
-    = MinMax String
+    = MinMax Length Length
 
 
-minmax : Length a String -> Length b String -> MinMax
+minmax : Length -> Length -> MinMax
 minmax min max =
-    MinMax <| "minmax(" ++ lengthToString min ++ ", " ++ lengthToString max ++ ")"
+    MinMax min max
 
 
 minmaxToString : MinMax -> String
-minmaxToString (MinMax value) =
-    value
-
-
-
--- TODO type <percentage>
+minmaxToString (MinMax min max) =
+    "minmax(" ++ lengthToString min ++ ", " ++ lengthToString max ++ ")"
 
 
 {-| auto
@@ -28,64 +24,43 @@ type Auto
 
 
 
--- TODO types <length>
+-- TODO type <percentage>
 
 
-type Px
-    = Px
+type Length
+    = Fr Float
+    | Px Int
 
 
-type Cm
-    = Cm
-
-
-type Length unit value
-    = Length value
-
-
-px : Int -> Length Px String
+px : Int -> Length
 px length =
-    Length <| String.fromInt length ++ "px"
+    Px length
 
 
-cm : Float -> Length Cm String
-cm length =
-    Length <| String.fromFloat length ++ "cm"
+fr : Float -> Length
+fr length =
+    Fr length
 
 
-lengthToString : Length unit String -> String
-lengthToString (Length value) =
-    value
+lengthToString : Length -> String
+lengthToString length =
+    case length of
+        Fr float ->
+            String.fromFloat float ++ "fr"
 
-
-
--- type <flex> TODO as Length ?
-
-
-type Fraction
-    = Fraction String
-
-
-fr : Int -> Fraction
-fr value =
-    Fraction <| String.fromInt value ++ "fr"
-
-
-fractionToString : Fraction -> String
-fractionToString (Fraction value) =
-    value
+        Px int ->
+            String.fromInt int ++ "px"
 
 
 type Gap
-    = Gap String
+    = Gap Length
 
 
 gapToString : Gap -> String
 gapToString (Gap value) =
-    value
+    lengthToString value
 
--- TODO Length parameter
 
-gapPx : Int -> Gap
-gapPx length =
-    Gap <| String.fromInt length ++ "px"
+gap : Length -> Gap
+gap length =
+    Gap length
