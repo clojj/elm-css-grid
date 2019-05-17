@@ -1,4 +1,4 @@
-module CssGrid.Sizes exposing (Auto, Fraction, Gap, Length, MinMax, cm, fr, fractionToString, gapPx, gapToString, lengthToString, minmax, px)
+module CssGrid.Sizes exposing (Auto, Fraction, Gap, Length, MinMax, cm, fr, fractionToString, gapPx, gapToString, lengthToString, minmax, px, Px, Cm)
 
 -- minmax(min, max)
 
