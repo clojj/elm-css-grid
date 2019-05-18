@@ -69,8 +69,7 @@ view model =
         []
         [ gridAreaElement headArea (testPanel "header ")
         , gridAreaElement naviArea (testPanel "nav ")
---        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
-        , gridAreaElement contArea [ viewNested model ]
+        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
         , gridAreaElement footArea (testPanel "footer ")
         ]
 
