@@ -1,56 +1,24 @@
-module Main exposing (Model, bigScreenTemplate, bootstrapPanel, gridTemplateBig, gridTemplateSmall, initialModel, main, smallScreenTemplate, testPanel, update, view)
+module Main exposing (Model, bigScreenTemplate, bootstrapPanel, initialModel, main, smallScreenTemplate, testPanel, update, view)
 
-import Areas exposing (contArea, footArea, headArea, naviArea)
+import Areas exposing (cont1, contLeft1, contRight1, foot1, head1, navi1)
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.ListGroup as ListGroup
 import Browser
 import Css as Css
 import Css.Media as Media exposing (MediaQuery, only, screen)
-import CssGrid exposing (..)
 import CssGrid.Areas exposing (gridAreaElement)
+import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (..)
 import Html
 import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
-import Simple exposing (viewNested)
+import Simple exposing (viewSimple)
 
 
 type alias Model =
     ()
 
-
-gridTemplateBig : GridAreasTemplate
-gridTemplateBig =
-    gridAreasTemplate
-        [ [ headArea, naviArea, naviArea ]
-        , [ contArea, contArea, contArea ]
-        , [ footArea, footArea, footArea ]
-        ]
-        [ fr 1, fr 8, fr 1 ]
-        [ fr 1, fr 1, fr 1 ]
-
-
-gridTemplateSmall : GridAreasTemplate
-gridTemplateSmall =
-    gridAreasTemplate
-        [ [ headArea ]
-        , [ contArea ]
-        , [ naviArea ]
-        , [ footArea ]
-        ]
-        [ fr 1, fr 4, fr 1, fr 1 ]
-        [ fr 1 ]
-
-
-bigScreenTemplate : MediaQueryWithGridAreasTemplate
-bigScreenTemplate =
-    ( [ only screen [ Media.minWidth (Css.px 501) ] ], gridTemplateBig )
-
-
-smallScreenTemplate : MediaQueryWithGridAreasTemplate
-smallScreenTemplate =
-    ( [ only screen [ Media.maxWidth (Css.px 500) ] ], gridTemplateSmall )
 
 
 initialModel : Model
@@ -65,13 +33,47 @@ update _ model =
 
 view : Model -> Html.Styled.Html msg
 view model =
-    gridAreasContainer [ bigScreenTemplate, smallScreenTemplate ]
+    simpleContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
-        [ gridAreaElement headArea (testPanel "header ")
-        , gridAreaElement naviArea (testPanel "nav ")
-        , gridAreaElement contArea [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewNested model ]
-        , gridAreaElement footArea (testPanel "footer ")
+        [ gridAreaElement head1 (testPanel "header ")
+        , gridAreaElement navi1 (testPanel "nav ")
+        , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewSimple model ]
+        , gridAreaElement foot1 (testPanel "footer ")
         ]
+
+simpleTemplateBig : SimpleTemplate
+simpleTemplateBig =
+    simpleTemplate
+        [ [ head1, navi1, navi1 ]
+        , [ contLeft1, cont1, contRight1 ]
+        , [ foot1, foot1, foot1 ]
+        ]
+        (gap (px 3))
+        [ fr 1, fr 1, fr 1 ]
+
+
+simpleTemplateSmall : SimpleTemplate
+simpleTemplateSmall =
+    simpleTemplate
+        [ [ head1 ]
+        , [ navi1 ]
+        , [ contLeft1 ]
+        , [ contRight1 ]
+        , [ cont1 ]
+        , [ foot1 ]
+        ]
+        (gap (px 5))
+        []
+
+
+bigScreenTemplate : ResponsiveTemplate
+bigScreenTemplate =
+    ( [ only screen [ Media.minWidth (Css.px 401) ] ], simpleTemplateBig )
+
+
+smallScreenTemplate : ResponsiveTemplate
+smallScreenTemplate =
+    ( [ only screen [ Media.maxWidth (Css.px 400) ] ], simpleTemplateSmall )
 
 
 bootstrapPanel =

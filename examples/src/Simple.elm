@@ -1,4 +1,4 @@
-module Simple exposing (simpleTemplateBig, viewNested)
+module Simple exposing (simpleTemplateBig, viewSimple)
 
 import Areas exposing (cont, contLeft, contRight, foot, head, navi)
 import Css as Css
@@ -45,8 +45,8 @@ smallScreenTemplate =
     ( [ only screen [ Media.maxWidth (Css.px 400) ] ], simpleTemplateSmall )
 
 
-viewNested : () -> Html.Styled.Html msg
-viewNested _ =
+viewSimple : () -> Html.Styled.Html msg
+viewSimple _ =
     simpleContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
         [ gridAreaElement head (panel <| text "head")
