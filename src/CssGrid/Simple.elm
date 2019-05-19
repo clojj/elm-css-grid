@@ -3,7 +3,7 @@ module CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContai
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
 import CssGrid.Areas as Areas exposing (Areas, GridAreaElement, gridAreaElementArea, gridAreaElementChildren)
-import CssGrid.Sizes exposing (Gap, Length, gapToString, lengthToString)
+import CssGrid.Sizes exposing (Gap, Length, LengthTemplate, gapToString, lengthTemplateToString)
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
@@ -29,10 +29,10 @@ See also this [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/C
 
 -}
 type SimpleTemplate
-    = SimpleTemplate Areas Gap (List Length)
+    = SimpleTemplate Areas Gap (List LengthTemplate)
 
 
-simpleTemplate : Areas -> Gap -> List Length -> SimpleTemplate
+simpleTemplate : Areas -> Gap -> List LengthTemplate -> SimpleTemplate
 simpleTemplate areas gap columnFractions =
     SimpleTemplate areas gap columnFractions
 
@@ -63,7 +63,7 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
             List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
 
         colSizes =
-            String.join " " (List.map lengthToString cols)
+            String.join " " (List.map lengthTemplateToString cols)
 
         templateCols =
             case cols of

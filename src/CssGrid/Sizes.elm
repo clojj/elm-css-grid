@@ -1,28 +1,4 @@
-module CssGrid.Sizes exposing (Auto, Gap, Length, MinMax, fr, gap, gapToString, lengthToString, minmax, minmaxToString, px)
-
--- minmax(min, max)
-
-
-type MinMax
-    = MinMax Length Length
-
-
-minmax : Length -> Length -> MinMax
-minmax min max =
-    MinMax min max
-
-
-minmaxToString : MinMax -> String
-minmaxToString (MinMax min max) =
-    "minmax(" ++ lengthToString min ++ ", " ++ lengthToString max ++ ")"
-
-
-{-| auto
--}
-type Auto
-    = Auto
-
-
+module CssGrid.Sizes exposing (Gap, Length, LengthTemplate, auto, fr, gap, gapToString, lengthTemplateToString, lengthToString, minmax, px, units)
 
 -- TODO type <percentage>
 
@@ -32,14 +8,14 @@ type Length
     | Px Int
 
 
-px : Int -> Length
-px length =
-    Px length
-
-
 fr : Float -> Length
 fr length =
     Fr length
+
+
+px : Int -> Length
+px length =
+    Px length
 
 
 lengthToString : Length -> String
@@ -52,13 +28,47 @@ lengthToString length =
             String.fromInt int ++ "px"
 
 
+type LengthTemplate
+    = Units Length
+    | Auto
+    | MinMax Length Length
+
+
+units : Length -> LengthTemplate
+units =
+    Units
+
+
+auto : LengthTemplate
+auto =
+    Auto
+
+
+minmax : Length -> Length -> LengthTemplate
+minmax min max =
+    MinMax min max
+
+
+lengthTemplateToString : LengthTemplate -> String
+lengthTemplateToString length =
+    case length of
+        Units lengthUnits ->
+            lengthToString lengthUnits
+
+        Auto ->
+            "auto"
+
+        MinMax min max ->
+            "minmax(" ++ lengthToString min ++ ", " ++ lengthToString max ++ ")"
+
+
 type Gap
     = Gap Length
 
 
 gapToString : Gap -> String
-gapToString (Gap value) =
-    lengthToString value
+gapToString (Gap length) =
+    lengthToString length
 
 
 gap : Length -> Gap

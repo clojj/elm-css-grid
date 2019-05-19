@@ -1,11 +1,11 @@
-module Simple exposing (simpleTemplateBig, viewSimple)
+module InnerView exposing (simpleTemplateBig, viewInner)
 
 import Areas exposing (cont, contLeft, contRight, foot, head, navi)
 import Css as Css
 import Css.Media as Media exposing (only, screen)
 import CssGrid.Areas exposing (GridArea, gridAreaElement)
 import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
-import CssGrid.Sizes exposing (fr, gap, px)
+import CssGrid.Sizes exposing (fr, gap, px, units)
 import Html.Styled exposing (Html, div, p, text)
 import Html.Styled.Attributes exposing (css)
 
@@ -18,7 +18,7 @@ simpleTemplateBig =
         , [ foot, foot, foot ]
         ]
         (gap (px 3))
-        [ fr 1, fr 1, fr 1 ]
+        [ units (fr 1), units (fr 1), units (fr 1) ]
 
 
 simpleTemplateSmall : SimpleTemplate
@@ -45,15 +45,15 @@ smallScreenTemplate =
     ( [ only screen [ Media.maxWidth (Css.px 400) ] ], simpleTemplateSmall )
 
 
-viewSimple : () -> Html.Styled.Html msg
-viewSimple _ =
+viewInner : () -> Html.Styled.Html msg
+viewInner _ =
     simpleContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
         [ gridAreaElement head (panel <| text "head")
         , gridAreaElement navi (panel <| text "navi")
-        , gridAreaElement contLeft (panel <| p [] [text "left"])
-        , gridAreaElement cont (panel <| p [] [text "cont"])
-        , gridAreaElement contRight (panel <| p [] [text "right"])
+        , gridAreaElement contLeft (panel <| p [] [ text "left" ])
+        , gridAreaElement cont (panel <| p [] [ text "cont" ])
+        , gridAreaElement contRight (panel <| p [] [ text "right" ])
         , gridAreaElement foot (panel <| text "foot")
         ]
 

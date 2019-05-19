@@ -13,12 +13,11 @@ import CssGrid.Sizes exposing (..)
 import Html
 import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
-import Simple exposing (viewSimple)
+import InnerView exposing (viewInner)
 
 
 type alias Model =
     ()
-
 
 
 initialModel : Model
@@ -37,19 +36,22 @@ view model =
         []
         [ gridAreaElement head1 (testPanel "header ")
         , gridAreaElement navi1 (testPanel "nav ")
-        , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewSimple model ]
+        , gridAreaElement contLeft1 (testPanel "contLeft ")
+        , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewInner model ]
+        , gridAreaElement contRight1 (testPanel "contRight ")
         , gridAreaElement foot1 (testPanel "footer ")
         ]
+
 
 simpleTemplateBig : SimpleTemplate
 simpleTemplateBig =
     simpleTemplate
-        [ [ head1, navi1, navi1 ]
+        [ [ head1, navi1, contRight1 ]
         , [ contLeft1, cont1, contRight1 ]
         , [ foot1, foot1, foot1 ]
         ]
-        (gap (px 3))
-        [ fr 1, fr 1, fr 1 ]
+        (gap (px 10))
+        [ auto, units (fr 1), auto ]
 
 
 simpleTemplateSmall : SimpleTemplate
