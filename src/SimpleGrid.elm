@@ -1,4 +1,44 @@
-module CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
+module SimpleGrid exposing
+    ( simpleTemplate
+    , ResponsiveTemplate
+    , simpleContainer
+    , SimpleTemplate
+    )
+
+{-| This library provides types and functions for building views with CSS Grid layout.
+It depends on the package `rtfeldman/elm-css` for constructing styled Html (Copyright (c) 2015, Richard Feldman).
+
+
+# Common length values (currently a subset of the CSS Grid specification!)
+
+@docs fr, px
+
+
+# Length values for template definitions (currently a subset of the CSS Grid specification!)
+
+@docs units, auto, minmax
+
+
+# Defining a (CSS Grid) template and areas
+
+@docs simpleTemplate, gridArea
+
+
+# Binding templates to media-queries
+
+@docs ResponsiveTemplate
+
+
+# Definition of the CSS Grid container
+
+@docs simpleContainer
+
+
+# Definition of layouted Html, carrying a CSS attribute `grid-area`.
+
+@docs gridAreaElement
+
+-}
 
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
@@ -8,12 +48,12 @@ import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
 
+type SimpleTemplate
+    = SimpleTemplate Areas Gap (List LengthTemplate)
 
--- TODO common template: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout
 
-
-{-| Represents a minimal fraction-based layout with area names and a grid-gap.
-For example:
+{-| Constructor function. The resulting value represents a minimal layout definition with areas, grid-gap and grid-template-columns.
+A value of this type, when used somewhere inside the `view` function, will produce CSS similar to this example:
 
         display: grid;
         grid-gap: 20px;
@@ -25,22 +65,23 @@ For example:
           "ad      footer";
 
 Implicitly, grid-template-rows are defined as needed by the area definition.
-See also this [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout).
+
+See also [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout).
 
 -}
-type SimpleTemplate
-    = SimpleTemplate Areas Gap (List LengthTemplate)
-
-
 simpleTemplate : Areas -> Gap -> List LengthTemplate -> SimpleTemplate
 simpleTemplate areas gap columnFractions =
     SimpleTemplate areas gap columnFractions
 
 
+{-| A pair of values, defining the media-queries (first value) for the template (second value) to be active.
+-}
 type alias ResponsiveTemplate =
     ( List MediaQuery, SimpleTemplate )
 
 
+{-| Constructs a `div` container which will layout child-elements with area-names according to the given template-definitions.
+-}
 simpleContainer : List ResponsiveTemplate -> List (Attribute msg) -> List (GridAreaElement msg) -> Html msg
 simpleContainer mappings attributes children =
     let

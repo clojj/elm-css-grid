@@ -8,7 +8,7 @@ import Browser
 import Css as Css
 import Css.Media as Media exposing (MediaQuery, only, screen)
 import CssGrid.Areas exposing (gridAreaElement)
-import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
+import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (..)
 import Html
 import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)

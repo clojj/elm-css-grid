@@ -4,7 +4,7 @@ import Areas exposing (cont, contLeft, contRight, foot, head, navi)
 import Css as Css
 import Css.Media as Media exposing (only, screen)
 import CssGrid.Areas exposing (GridArea, gridAreaElement)
-import CssGrid.Simple exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
+import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (fr, gap, px, units)
 import Html.Styled exposing (Html, div, p, text)
 import Html.Styled.Attributes exposing (css)
