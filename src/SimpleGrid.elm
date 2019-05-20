@@ -1,27 +1,29 @@
 module SimpleGrid exposing
-    ( simpleTemplate
+    ( Length, fr, px
+    , LengthTemplate, units, auto, minmax
+    , SimpleTemplate, simpleTemplate, GridArea, gridArea
     , ResponsiveTemplate
-    , simpleContainer
-    , SimpleTemplate
-    )
+    , mediaGridContainer
+    , gridElement
+    , gridContainer)
 
 {-| This library provides types and functions for building views with CSS Grid layout.
 It depends on the package `rtfeldman/elm-css` for constructing styled Html (Copyright (c) 2015, Richard Feldman).
 
 
-# Common length values (currently a subset of the CSS Grid specification!)
+# Common length
 
-@docs fr, px
-
-
-# Length values for template definitions (currently a subset of the CSS Grid specification!)
-
-@docs units, auto, minmax
+@docs Length, fr, px
 
 
-# Defining a (CSS Grid) template and areas
+# Length for template definitions
 
-@docs simpleTemplate, gridArea
+@docs LengthTemplate, units, auto, minmax
+
+
+# Defining a (CSS Grid) template- and area-definitions
+
+@docs SimpleTemplate, simpleTemplate, GridArea, gridArea
 
 
 # Binding templates to media-queries
@@ -31,25 +33,103 @@ It depends on the package `rtfeldman/elm-css` for constructing styled Html (Copy
 
 # Definition of the CSS Grid container
 
-@docs simpleContainer
+@docs gridContainer, mediaGridContainer
 
 
-# Definition of layouted Html, carrying a CSS attribute `grid-area`.
+# Definition of layouted Html, identified by a value of type `GridArea`
 
-@docs gridAreaElement
+@docs gridElement
 
 -}
 
 import Css exposing (Style, property)
 import Css.Media exposing (MediaQuery, withMedia)
-import CssGrid.Areas as Areas exposing (Areas, GridAreaElement, gridAreaElementArea, gridAreaElementChildren)
-import CssGrid.Sizes exposing (Gap, Length, LengthTemplate, gapToString, lengthTemplateToString)
+import CssGrid.Areas as Areas
+import CssGrid.Sizes as Sizes
 import Html.Styled exposing (Attribute, Html, div)
 import Html.Styled.Attributes exposing (css)
 
 
+{-| Represents a [grid-area](https://developer.mozilla.org/en-US/docs/Web/CSS/grid-area), uniquely identified by a name.
+The name of the grid-area must be unique for the entire view.
+
+    gridArea "header"
+
+The resulting GridArea will be appear in the resulting CSS in two places:
+
+1.  As an element of the template-definition.
+2.  As the value of the `grid-area` property in a Html element, which gets its layout from the template-definition.
+
+-}
+type alias GridArea =
+    Areas.GridArea
+
+
+{-| Constructs a GridArea
+-}
+gridArea : String -> GridArea
+gridArea =
+    Areas.gridArea
+
+
+{-| Constructs a Html element with `grid-area`
+-}
+gridElement : GridArea -> List (Html msg) -> Areas.GridAreaElement msg
+gridElement =
+    Areas.gridAreaElement
+
+
+{-| Length with explicit units.
+-}
+type alias Length =
+    Sizes.Length
+
+
+{-| A 'fractional' length
+-}
+fr : Float -> Length
+fr =
+    Sizes.fr
+
+
+{-| A length in absolute pixels.
+-}
+px : Int -> Length
+px =
+    Sizes.px
+
+
+{-| Length with explicit units plus template-specific length-values.
+-}
+type alias LengthTemplate =
+    Sizes.LengthTemplate
+
+
+{-| Constructs a length from a , which can be used in a template-definition (like `grid-template-columns`)
+-}
+units : Length -> LengthTemplate
+units =
+    Sizes.units
+
+
+{-| The `auto` value from CSS Grid.
+-}
+auto : LengthTemplate
+auto =
+    Sizes.auto
+
+
+{-| The `minmax` function from CSS Grid.
+-}
+minmax : Length -> Length -> LengthTemplate
+minmax =
+    Sizes.minmax
+
+
+{-| Represents simple template for CSS Grid
+-}
 type SimpleTemplate
-    = SimpleTemplate Areas Gap (List LengthTemplate)
+    = SimpleTemplate Areas.Areas Sizes.Gap (List Sizes.LengthTemplate)
 
 
 {-| Constructor function. The resulting value represents a minimal layout definition with areas, grid-gap and grid-template-columns.
@@ -69,7 +149,7 @@ Implicitly, grid-template-rows are defined as needed by the area definition.
 See also [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Grid_Layout/Realizing_common_layouts_using_CSS_Grid_Layout).
 
 -}
-simpleTemplate : Areas -> Gap -> List LengthTemplate -> SimpleTemplate
+simpleTemplate : Areas.Areas -> Sizes.Gap -> List Sizes.LengthTemplate -> SimpleTemplate
 simpleTemplate areas gap columnFractions =
     SimpleTemplate areas gap columnFractions
 
@@ -80,15 +160,29 @@ type alias ResponsiveTemplate =
     ( List MediaQuery, SimpleTemplate )
 
 
-{-| Constructs a `div` container which will layout child-elements with area-names according to the given template-definitions.
+{-| Constructs a `div` container which will layout child-elements identified by areas defined in the template-definition(s).
+Uses `ResponsiveTemplate` to provide a responsive layout for more than one media device.
 -}
-simpleContainer : List ResponsiveTemplate -> List (Attribute msg) -> List (GridAreaElement msg) -> Html msg
-simpleContainer mappings attributes children =
+mediaGridContainer : List ResponsiveTemplate -> List (Attribute msg) -> List (Areas.GridAreaElement msg) -> Html msg
+mediaGridContainer templateMappings attributes children =
     let
         styles =
-            List.map (\( mediaQuery, gridTemlate ) -> toMediaStyle mediaQuery (simpleTemplateToStyle gridTemlate)) mappings
+            List.map (\( mediaQuery, gridTemlate ) -> toMediaStyle mediaQuery (simpleTemplateToStyle gridTemlate)) templateMappings
     in
     div ([ css styles ] ++ attributes)
+        (List.map renderGridAreaElement children)
+
+
+{-| Constructs a `div` container which will layout child-elements identified by areas defined in the template-definition(s).
+Uses `SimpleTemplate` to provide one single layout.
+-}
+gridContainer : SimpleTemplate -> List (Attribute msg) -> List (Areas.GridAreaElement msg) -> Html msg
+gridContainer template attributes children =
+    let
+        style =
+            simpleTemplateToStyle template
+    in
+    div ([ css [ style ] ] ++ attributes)
         (List.map renderGridAreaElement children)
 
 
@@ -104,7 +198,7 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
             List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
 
         colSizes =
-            String.join " " (List.map lengthTemplateToString cols)
+            String.join " " (List.map Sizes.lengthTemplateToString cols)
 
         templateCols =
             case cols of
@@ -118,13 +212,13 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
         [ property "display" "grid"
         , property "width" "100%"
         , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
-        , property "grid-gap" (gapToString gap)
+        , property "grid-gap" (Sizes.gapToString gap)
         ]
             ++ templateCols
 
 
-renderGridAreaElement : GridAreaElement msg -> Html msg
+renderGridAreaElement : Areas.GridAreaElement msg -> Html msg
 renderGridAreaElement gridElem =
     div
-        [ css [ property "grid-area" (Areas.toString (gridAreaElementArea gridElem)) ] ]
-        (gridAreaElementChildren gridElem)
+        [ css [ property "grid-area" (Areas.toString (Areas.gridAreaElementArea gridElem)) ] ]
+        (Areas.gridAreaElementChildren gridElem)

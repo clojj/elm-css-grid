@@ -4,10 +4,10 @@ import Areas exposing (cont, contLeft, contRight, foot, head, navi)
 import Css as Css
 import Css.Media as Media exposing (only, screen)
 import CssGrid.Areas exposing (GridArea, gridAreaElement)
-import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (fr, gap, px, units)
 import Html.Styled exposing (Html, div, p, text)
 import Html.Styled.Attributes exposing (css)
+import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, mediaGridContainer, simpleTemplate)
 
 
 simpleTemplateBig : SimpleTemplate
@@ -47,7 +47,7 @@ smallScreenTemplate =
 
 viewInner : () -> Html.Styled.Html msg
 viewInner _ =
-    simpleContainer [ bigScreenTemplate, smallScreenTemplate ]
+    mediaGridContainer [ bigScreenTemplate, smallScreenTemplate ]
         []
         [ gridAreaElement head (panel <| text "head")
         , gridAreaElement navi (panel <| text "navi")

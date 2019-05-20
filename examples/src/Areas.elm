@@ -1,10 +1,25 @@
-module Areas exposing (cont, contLeft, contRight, foot, head, navi, head1, navi1, cont1, contLeft1, contRight1, foot1)
+module Areas exposing (cont, cont1, contLeft, contLeft1, contRight, contRight1, foot, foot1, head, head1, navi, navi1, headFix, contFix, footFix)
 
 import CssGrid.Areas exposing (GridArea, gridArea)
 
 
 
 {- Some globally unique area names -}
+
+
+headFix : GridArea
+headFix =
+    gridArea "headFix"
+
+
+contFix : GridArea
+contFix =
+    gridArea "contentFix"
+
+
+footFix : GridArea
+footFix =
+    gridArea "footFix"
 
 
 head1 : GridArea

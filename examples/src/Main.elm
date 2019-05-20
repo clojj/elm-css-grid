@@ -1,6 +1,6 @@
 module Main exposing (Model, bigScreenTemplate, bootstrapPanel, initialModel, main, smallScreenTemplate, testPanel, update, view)
 
-import Areas exposing (cont1, contLeft1, contRight1, foot1, head1, navi1)
+import Areas exposing (cont1, contFix, contLeft1, contRight1, foot1, footFix, head1, headFix, navi1)
 import Bootstrap.CDN as CDN
 import Bootstrap.Card as Card
 import Bootstrap.ListGroup as ListGroup
@@ -8,12 +8,12 @@ import Browser
 import Css as Css
 import Css.Media as Media exposing (MediaQuery, only, screen)
 import CssGrid.Areas exposing (gridAreaElement)
-import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, simpleContainer, simpleTemplate)
 import CssGrid.Sizes exposing (..)
 import Html
-import Html.Styled exposing (Attribute, Html, div, fromUnstyled, text, toUnstyled)
+import Html.Styled exposing (Attribute, Html, br, div, fromUnstyled, text, toUnstyled)
 import Html.Styled.Attributes exposing (css)
 import InnerView exposing (viewInner)
+import SimpleGrid exposing (ResponsiveTemplate, SimpleTemplate, gridContainer, mediaGridContainer, simpleTemplate)
 
 
 type alias Model =
@@ -32,15 +32,35 @@ update _ model =
 
 view : Model -> Html.Styled.Html msg
 view model =
-    simpleContainer [ bigScreenTemplate, smallScreenTemplate ]
-        []
-        [ gridAreaElement head1 (testPanel "header ")
-        , gridAreaElement navi1 (testPanel "nav ")
-        , gridAreaElement contLeft1 (testPanel "contLeft ")
-        , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewInner model ]
-        , gridAreaElement contRight1 (testPanel "contRight ")
-        , gridAreaElement foot1 (testPanel "footer ")
+    div []
+        [ mediaGridContainer [ bigScreenTemplate, smallScreenTemplate ]
+            []
+            [ gridAreaElement head1 (testPanel "header ")
+            , gridAreaElement navi1 (testPanel "nav ")
+            , gridAreaElement contLeft1 (testPanel "contLeft ")
+            , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewInner model ]
+            , gridAreaElement contRight1 (testPanel "contRight ")
+            , gridAreaElement foot1 (testPanel "footer ")
+            ]
+        , br [] []
+        , gridContainer simpleTemplateFix
+            []
+            [ gridAreaElement headFix (testPanel "headFix ")
+            , gridAreaElement contFix (testPanel "contFix ")
+            , gridAreaElement footFix (testPanel "footFix ")
+            ]
         ]
+
+
+simpleTemplateFix : SimpleTemplate
+simpleTemplateFix =
+    simpleTemplate
+        [ [ headFix ]
+        , [ contFix ]
+        , [ footFix ]
+        ]
+        (gap (px 3))
+        [ minmax (px 400) (px 600) ]
 
 
 simpleTemplateBig : SimpleTemplate
