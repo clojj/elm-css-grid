@@ -3,7 +3,7 @@
     "name": "clojj/elm-css-grid",
     "summary": "Provides CSS Grid layout",
     "license": "BSD-3-Clause",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "exposed-modules": [
         "SimpleGrid"
     ],

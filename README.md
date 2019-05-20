@@ -1,5 +1,5 @@
 CSS Grid package for Elm
-=
+========================
 
 Based on ```rtfeldman/elm-css```, this package will provides **typesafe** and responsive-by-nature layout of Html by utilizing the **CSS Grid specification**
 

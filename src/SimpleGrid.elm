@@ -1,24 +1,24 @@
 module SimpleGrid exposing
-    ( Length, fr, px
-    , LengthTemplate, units, auto, minmax
+    ( gridContainer, mediaGridContainer
+    , gridElement
     , SimpleTemplate, simpleTemplate, GridArea, gridArea
     , ResponsiveTemplate
-    , mediaGridContainer
-    , gridElement
-    , gridContainer)
+    , Length, fr, px
+    , LengthTemplate, units, auto, minmax
+    )
 
 {-| This library provides types and functions for building views with CSS Grid layout.
-It depends on the package `rtfeldman/elm-css` for constructing styled Html (Copyright (c) 2015, Richard Feldman).
+It depends on the package `rtfeldman/elm-css` for constructing styled Html.
 
 
-# Common length
+# Definition of the CSS Grid container
 
-@docs Length, fr, px
+@docs gridContainer, mediaGridContainer
 
 
-# Length for template definitions
+# Definition of layouted Html, identified by a value of type `GridArea`
 
-@docs LengthTemplate, units, auto, minmax
+@docs gridElement
 
 
 # Defining a (CSS Grid) template- and area-definitions
@@ -31,14 +31,14 @@ It depends on the package `rtfeldman/elm-css` for constructing styled Html (Copy
 @docs ResponsiveTemplate
 
 
-# Definition of the CSS Grid container
+# Common length
 
-@docs gridContainer, mediaGridContainer
+@docs Length, fr, px
 
 
-# Definition of layouted Html, identified by a value of type `GridArea`
+# Length for template definitions
 
-@docs gridElement
+@docs LengthTemplate, units, auto, minmax
 
 -}
 
