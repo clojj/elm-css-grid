@@ -38,7 +38,7 @@ view model =
             [ gridAreaElement head1 (testPanel "header ")
             , gridAreaElement navi1 (testPanel "nav ")
             , gridAreaElement contLeft1 (testPanel "contLeft ")
-            , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewInner model ]
+            , gridAreaElement cont1 [ fromUnstyled CDN.stylesheet, bootstrapPanel, viewInner model ] -- just to make sure that using bootstrap-without-layout is possible!
             , gridAreaElement contRight1 (testPanel "contRight ")
             , gridAreaElement foot1 (testPanel "footer ")
             ]
