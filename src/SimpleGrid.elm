@@ -5,6 +5,7 @@ module SimpleGrid exposing
     , ResponsiveTemplate
     , Length, fr, px
     , LengthTemplate, units, auto, minmax
+    , gap
     )
 
 {-| This library provides types and functions for building views with CSS Grid layout.
@@ -126,6 +127,13 @@ minmax =
     Sizes.minmax
 
 
+{-| The `minmax` function from CSS Grid.
+-}
+gap : Length -> Sizes.Gap
+gap =
+    Sizes.gap
+
+
 {-| Represents simple template for CSS Grid
 -}
 type SimpleTemplate
@@ -150,8 +158,8 @@ See also [common layout](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Gr
 
 -}
 simpleTemplate : Areas.Areas -> Sizes.Gap -> List Sizes.LengthTemplate -> SimpleTemplate
-simpleTemplate areas gap columnFractions =
-    SimpleTemplate areas gap columnFractions
+simpleTemplate areas gapSize columnFractions =
+    SimpleTemplate areas gapSize columnFractions
 
 
 {-| A pair of values, defining the media-queries (first value) for the template (second value) to be active.
@@ -192,7 +200,7 @@ toMediaStyle mediaQuery style =
 
 
 simpleTemplateToStyle : SimpleTemplate -> Style
-simpleTemplateToStyle (SimpleTemplate areas gap cols) =
+simpleTemplateToStyle (SimpleTemplate areas gapSize cols) =
     let
         areaRows =
             List.map (\gridAreas -> String.join " " (List.map Areas.toString gridAreas)) areas
@@ -212,7 +220,7 @@ simpleTemplateToStyle (SimpleTemplate areas gap cols) =
         [ property "display" "grid"
         , property "width" "100%"
         , property "grid-template-areas" <| String.join " " (List.map (\s -> "'" ++ s ++ "'") areaRows)
-        , property "grid-gap" (Sizes.gapToString gap)
+        , property "grid-gap" (Sizes.gapToString gapSize)
         ]
             ++ templateCols
 
