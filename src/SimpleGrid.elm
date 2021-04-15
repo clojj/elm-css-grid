@@ -39,7 +39,7 @@ It depends on the package `rtfeldman/elm-css` for constructing styled Html.
 
 # Length for template definitions
 
-@docs LengthTemplate, units, auto, minmax
+@docs LengthTemplate, units, auto, minmax, gap
 
 -}
 
@@ -127,7 +127,7 @@ minmax =
     Sizes.minmax
 
 
-{-| The `minmax` function from CSS Grid.
+{-| The `gap` function from CSS Grid.
 -}
 gap : Length -> Sizes.Gap
 gap =
